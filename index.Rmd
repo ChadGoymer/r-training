@@ -1,0 +1,12 @@
+---
+title: "R Training"
+author: "Chad Goymer"
+output: 
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+This is the web site for R Training
