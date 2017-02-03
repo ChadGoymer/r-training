@@ -1,0 +1,30 @@
+name: "r-training"
+navbar:
+  title: "R Training"
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "RStudio"
+      href: rstudio.html
+    - text: "Tidyverse"
+      menu:
+        - text: "Importing Data"
+          href: importing-data.html
+        - text: "Tidying Data"
+          href: tidying-data.html
+        - text: "Transforming Data"
+          href: transforming-data.html
+        - text: "Combining Data"
+          href: combining-data.html
+        - text: "Modelling"
+          href: modelling.html
+        - text: "Visualisation"
+          href: visualisation.html
+        - text: "reporting"
+          href: reporting.html
+output:
+  html_document:
+    theme: flatly
+    highlight: textmate
+output_dir: "docs"
