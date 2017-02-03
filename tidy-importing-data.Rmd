@@ -1,0 +1,110 @@
+---
+title: "Importing Data"
+author: "Chad Goymer"
+output: html_document
+---
+
+Reading CSVs
+------------
+
+```{r}
+library(readr)
+
+read_csv("D:/Temp/NetPremiums_31225.csv")
+```
+
+The function guesses the data type of each column by reading the first 1000 rows. If later values 
+do not conform to the guess the problems are reported. The types can be specified explicitly using 
+the `col_types` argument.
+
+```{r}
+library(readr)
+
+read_csv(
+  "D:/Temp/NetPremiums_31225.csv", 
+  col_types = cols(
+    Synd = col_integer(),
+    YoA = col_integer(),
+    RG = col_character(),
+    Ccy = col_character(),
+    Value = col_double()))
+```
+
+By default the function will set any missing values `""` or `"NA"` to `NA`, which is R's way of 
+recording missing values. __Note:__ Lloyd's has a "NA" risk code so in that case you will need 
+to set `na = ""` in the function call.
+
+`read_csv` has a number of other arguments which may be useful, see `help(read_csv)` for more 
+details.
+
+Tibbles
+-------
+
+You may have noticed `read_csv` does not return a standard `data.frame`, it returns a `tibble`. A 
+tibble is very similar to a data.frame but it has a number advantages. By default printing a tibble 
+only shows the first 10 rows. This prevent accidently flooding your screen when printing a large 
+table.
+
+A data.frame can be converted to a tibble using the `as_tibble` function.
+
+```{r}
+library(tibble)
+
+df <- data.frame(Letters = LETTERS, Numbers = 1:26)
+as_tibble(df)
+```
+
+Tibbles can be created directly using the `tibble` function. Creating tibbles does not convert 
+character vectors into factors, it does not convert columns names, and variables can refer to 
+previous variables.
+
+```{r}
+library(tibble)
+
+tibble(
+  Letters = LETTERS, 
+  Numbers = 1:26, 
+  `:)` = paste0(Letters, Numbers))
+```
+
+Tibbles can also be created row-wise using `tribble` (transposed tibble) so they are more readable. 
+Column names are identified with a "~".
+
+```{r}
+library(tibble)
+
+tribble(
+  ~Letters, ~Numbers,
+  "A",      1,
+  "B",      2,
+  "C",      3,
+  "D",      4,
+  "E",      5)
+```
+
+The package `tibble` includes some useful functions, in particular `add_row` and `add_column`
+
+```{r}
+tribble(
+  ~Letters, ~Numbers,
+  "A",      1,
+  "B",      2,
+  "C",      3,
+  "D",      4,
+  "E",      5)
+```
+
+Reading Excel Files
+-------------------
+
+Importing from SQL Server
+-------------------------
+
+Other Sources
+-------------
+
+RDS
+
+JSON
+
+XML
