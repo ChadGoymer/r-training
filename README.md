@@ -1,2 +1,7 @@
-# tidyverse-training
-Training materials for R tidyverse packages
+R Training
+==========
+
+Training materials for R and RStudio.
+
+Tidyverse
+---------
