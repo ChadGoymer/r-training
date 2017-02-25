@@ -10,7 +10,7 @@ Reading CSVs
 ```{r}
 library(readr)
 
-read_csv("D:/Temp/NetPremiums_31225.csv")
+# read_csv("D:/Temp/NetPremiums_31225.csv")
 ```
 
 The function guesses the data type of each column by reading the first 1000 rows. If later values 
@@ -20,14 +20,15 @@ the `col_types` argument.
 ```{r}
 library(readr)
 
-read_csv(
-  "D:/Temp/NetPremiums_31225.csv", 
-  col_types = cols(
-    Synd = col_integer(),
-    YoA = col_integer(),
-    RG = col_character(),
-    Ccy = col_character(),
-    Value = col_double()))
+# read_csv(
+#   "D:/Temp/NetPremiums_31225.csv", 
+#   col_types = cols(
+#     Synd = col_integer(),
+#     YoA = col_integer(),
+#     RG = col_character(),
+#     Ccy = col_character(),
+#     Value = col_double()))
+
 ```
 
 By default the function will set any missing values `""` or `"NA"` to `NA`, which is R's way of 

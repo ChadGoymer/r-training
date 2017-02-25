@@ -10,19 +10,19 @@ navbar:
     - text: "Tidyverse"
       menu:
         - text: "Importing Data"
-          href: importing-data.html
+          href: tidy-importing-data.html
         - text: "Tidying Data"
-          href: tidying-data.html
+          href: tidy-tidying-data.html
         - text: "Transforming Data"
-          href: transforming-data.html
+          href: tidy-transforming-data.html
         - text: "Combining Data"
-          href: combining-data.html
+          href: tidy-combining-data.html
         - text: "Modelling"
-          href: modelling.html
+          href: tidy-modelling.html
         - text: "Visualisation"
-          href: visualisation.html
-        - text: "reporting"
-          href: reporting.html
+          href: tidy-visualisation.html
+        - text: "Reporting"
+          href: tidy-reporting.html
 output:
   html_document:
     theme: flatly

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Chad Goymer" />
+
+
+<title>Importing Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Training</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="rstudio.html">RStudio</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tidyverse
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="tidy-importing-data.html">Importing Data</a>
+    </li>
+    <li>
+      <a href="tidy-tidying-data.html">Tidying Data</a>
+    </li>
+    <li>
+      <a href="tidy-transforming-data.html">Transforming Data</a>
+    </li>
+    <li>
+      <a href="tidy-combining-data.html">Combining Data</a>
+    </li>
+    <li>
+      <a href="tidy-modelling.html">Modelling</a>
+    </li>
+    <li>
+      <a href="tidy-visualisation.html">Visualisation</a>
+    </li>
+    <li>
+      <a href="tidy-reporting.html">Reporting</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Importing Data</h1>
+<h4 class="author"><em>Chad Goymer</em></h4>
+
+</div>
+
+
+<div id="reading-csvs" class="section level2">
+<h2>Reading CSVs</h2>
+<pre class="r"><code>library(readr)
+
+# read_csv(&quot;D:/Temp/NetPremiums_31225.csv&quot;)</code></pre>
+<p>The function guesses the data type of each column by reading the first 1000 rows. If later values do not conform to the guess the problems are reported. The types can be specified explicitly using the <code>col_types</code> argument.</p>
+<pre class="r"><code>library(readr)
+
+# read_csv(
+#   &quot;D:/Temp/NetPremiums_31225.csv&quot;, 
+#   col_types = cols(
+#     Synd = col_integer(),
+#     YoA = col_integer(),
+#     RG = col_character(),
+#     Ccy = col_character(),
+#     Value = col_double()))</code></pre>
+<p>By default the function will set any missing values <code>&quot;&quot;</code> or <code>&quot;NA&quot;</code> to <code>NA</code>, which is R’s way of recording missing values. <strong>Note:</strong> Lloyd’s has a “NA” risk code so in that case you will need to set <code>na = &quot;&quot;</code> in the function call.</p>
+<p><code>read_csv</code> has a number of other arguments which may be useful, see <code>help(read_csv)</code> for more details.</p>
+</div>
+<div id="tibbles" class="section level2">
+<h2>Tibbles</h2>
+<p>You may have noticed <code>read_csv</code> does not return a standard <code>data.frame</code>, it returns a <code>tibble</code>. A tibble is very similar to a data.frame but it has a number advantages. By default printing a tibble only shows the first 10 rows. This prevent accidently flooding your screen when printing a large table.</p>
+<p>A data.frame can be converted to a tibble using the <code>as_tibble</code> function.</p>
+<pre class="r"><code>library(tibble)
+
+df &lt;- data.frame(Letters = LETTERS, Numbers = 1:26)
+as_tibble(df)</code></pre>
+<pre><code>## # A tibble: 26 × 2
+##    Letters Numbers
+##     &lt;fctr&gt;   &lt;int&gt;
+## 1        A       1
+## 2        B       2
+## 3        C       3
+## 4        D       4
+## 5        E       5
+## 6        F       6
+## 7        G       7
+## 8        H       8
+## 9        I       9
+## 10       J      10
+## # ... with 16 more rows</code></pre>
+<p>Tibbles can be created directly using the <code>tibble</code> function. Creating tibbles does not convert character vectors into factors, it does not convert columns names, and variables can refer to previous variables.</p>
+<pre class="r"><code>library(tibble)
+
+tibble(
+  Letters = LETTERS, 
+  Numbers = 1:26, 
+  `:)` = paste0(Letters, Numbers))</code></pre>
+<pre><code>## # A tibble: 26 × 3
+##    Letters Numbers  `:)`
+##      &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;
+## 1        A       1    A1
+## 2        B       2    B2
+## 3        C       3    C3
+## 4        D       4    D4
+## 5        E       5    E5
+## 6        F       6    F6
+## 7        G       7    G7
+## 8        H       8    H8
+## 9        I       9    I9
+## 10       J      10   J10
+## # ... with 16 more rows</code></pre>
+<p>Tibbles can also be created row-wise using <code>tribble</code> (transposed tibble) so they are more readable. Column names are identified with a “~”.</p>
+<pre class="r"><code>library(tibble)
+
+tribble(
+  ~Letters, ~Numbers,
+  &quot;A&quot;,      1,
+  &quot;B&quot;,      2,
+  &quot;C&quot;,      3,
+  &quot;D&quot;,      4,
+  &quot;E&quot;,      5)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   Letters Numbers
+##     &lt;chr&gt;   &lt;dbl&gt;
+## 1       A       1
+## 2       B       2
+## 3       C       3
+## 4       D       4
+## 5       E       5</code></pre>
+<p>The package <code>tibble</code> includes some useful functions, in particular <code>add_row</code> and <code>add_column</code></p>
+<pre class="r"><code>tribble(
+  ~Letters, ~Numbers,
+  &quot;A&quot;,      1,
+  &quot;B&quot;,      2,
+  &quot;C&quot;,      3,
+  &quot;D&quot;,      4,
+  &quot;E&quot;,      5)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   Letters Numbers
+##     &lt;chr&gt;   &lt;dbl&gt;
+## 1       A       1
+## 2       B       2
+## 3       C       3
+## 4       D       4
+## 5       E       5</code></pre>
+</div>
+<div id="reading-excel-files" class="section level2">
+<h2>Reading Excel Files</h2>
+</div>
+<div id="importing-from-sql-server" class="section level2">
+<h2>Importing from SQL Server</h2>
+</div>
+<div id="other-sources" class="section level2">
+<h2>Other Sources</h2>
+<p>RDS</p>
+<p>JSON</p>
+<p>XML</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
