@@ -9,7 +9,6 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Chad Goymer" />
 
 
 <title>Importing Data</title>
@@ -20,9 +19,14 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -163,6 +167,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -230,29 +329,48 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Importing Data</h1>
-<h4 class="author"><em>Chad Goymer</em></h4>
 
 </div>
 
 
 <div id="reading-csvs" class="section level2">
 <h2>Reading CSVs</h2>
+<p>To read CSVs, as well as any other plain text tabular file formats, we use the package <code>readr</code>. The function <code>read_csv</code> replaces the function <code>read.csv</code> from base R and improves upon it in a number of ways:</p>
+<ol style="list-style-type: decimal">
+<li>it is much faster</li>
+<li>it does not transform headers</li>
+<li>it does not convert character columns into factors</li>
+</ol>
+<p>Otherwise, it is used in the same way as <code>read.csv</code></p>
 <pre class="r"><code>library(readr)
-
-# read_csv(&quot;D:/Temp/NetPremiums_31225.csv&quot;)</code></pre>
+read_csv(&quot;data/TechnicalProvisions.csv&quot;)</code></pre>
+<pre><code>Parsed with column specification:
+cols(
+  Synd = col_integer(),
+  YoA = col_integer(),
+  GrossPremium = col_double(),
+  NetPremium = col_double()
+)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["int"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["int"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2017","3":"1046660.2","4":"919830.8"},{"1":"1","2":"2016","3":"953525.5","4":"843865.4"},{"1":"1","2":"2015","3":"1107822.1","4":"767366.4"},{"1":"2","2":"2017","3":"904408.0","4":"790273.2"},{"1":"2","2":"2016","3":"987396.9","4":"617853.3"},{"1":"2","2":"2015","3":"1143862.7","4":"701090.3"},{"1":"3","2":"2017","3":"1033288.2","4":"860298.4"},{"1":"3","2":"2016","3":"989560.2","4":"797455.8"},{"1":"3","2":"2015","3":"1209751.7","4":"755917.1"},{"1":"4","2":"2017","3":"1063499.8","4":"883209.4"},{"1":"4","2":"2016","3":"961298.8","4":"630323.4"},{"1":"4","2":"2015","3":"867491.9","4":"657570.6"},{"1":"5","2":"2017","3":"980981.1","4":"637975.8"},{"1":"5","2":"2016","3":"1114452.3","4":"775538.9"},{"1":"5","2":"2015","3":"1178579.4","4":"924489.6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>The function guesses the data type of each column by reading the first 1000 rows. If later values do not conform to the guess the problems are reported. The types can be specified explicitly using the <code>col_types</code> argument.</p>
-<pre class="r"><code>library(readr)
-
-# read_csv(
-#   &quot;D:/Temp/NetPremiums_31225.csv&quot;, 
-#   col_types = cols(
-#     Synd = col_integer(),
-#     YoA = col_integer(),
-#     RG = col_character(),
-#     Ccy = col_character(),
-#     Value = col_double()))</code></pre>
-<p>By default the function will set any missing values <code>&quot;&quot;</code> or <code>&quot;NA&quot;</code> to <code>NA</code>, which is R’s way of recording missing values. <strong>Note:</strong> Lloyd’s has a “NA” risk code so in that case you will need to set <code>na = &quot;&quot;</code> in the function call.</p>
-<p><code>read_csv</code> has a number of other arguments which may be useful, see <code>help(read_csv)</code> for more details.</p>
+<pre class="r"><code>read_csv(
+  &quot;data/TechnicalProvisions.csv&quot;,
+  col_types = cols(
+    Synd         = col_integer(),
+    YoA          = col_integer(),
+    GrossPremium = col_double(),
+    NetPremium   = col_double()))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["int"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["int"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2017","3":"1046660.2","4":"919830.8"},{"1":"1","2":"2016","3":"953525.5","4":"843865.4"},{"1":"1","2":"2015","3":"1107822.1","4":"767366.4"},{"1":"2","2":"2017","3":"904408.0","4":"790273.2"},{"1":"2","2":"2016","3":"987396.9","4":"617853.3"},{"1":"2","2":"2015","3":"1143862.7","4":"701090.3"},{"1":"3","2":"2017","3":"1033288.2","4":"860298.4"},{"1":"3","2":"2016","3":"989560.2","4":"797455.8"},{"1":"3","2":"2015","3":"1209751.7","4":"755917.1"},{"1":"4","2":"2017","3":"1063499.8","4":"883209.4"},{"1":"4","2":"2016","3":"961298.8","4":"630323.4"},{"1":"4","2":"2015","3":"867491.9","4":"657570.6"},{"1":"5","2":"2017","3":"980981.1","4":"637975.8"},{"1":"5","2":"2016","3":"1114452.3","4":"775538.9"},{"1":"5","2":"2015","3":"1178579.4","4":"924489.6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>By default the function will set any <code>&quot;&quot;</code> or <code>&quot;NA&quot;</code> to <code>NA</code>, which is R’s way of recording missing values. <strong>Note:</strong> Lloyd’s has a “NA” risk code so in that case you will need to set <code>na = &quot;&quot;</code> in the function call.</p>
+<p><code>read_csv</code> has a number of other arguments which may be useful, see <code>help(read_csv)</code> for more details. For more information about the other functions in the <code>readr</code> package see its <a href="https://www.rdocumentation.org/packages/readr">R Documentation</a>.</p>
 </div>
 <div id="tibbles" class="section level2">
 <h2>Tibbles</h2>
@@ -262,91 +380,264 @@ $(document).ready(function () {
 
 df &lt;- data.frame(Letters = LETTERS, Numbers = 1:26)
 as_tibble(df)</code></pre>
-<pre><code>## # A tibble: 26 × 2
-##    Letters Numbers
-##     &lt;fctr&gt;   &lt;int&gt;
-## 1        A       1
-## 2        B       2
-## 3        C       3
-## 4        D       4
-## 5        E       5
-## 6        F       6
-## 7        G       7
-## 8        H       8
-## 9        I       9
-## 10       J      10
-## # ... with 16 more rows</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Letters"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["Numbers"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"A","2":"1"},{"1":"B","2":"2"},{"1":"C","2":"3"},{"1":"D","2":"4"},{"1":"E","2":"5"},{"1":"F","2":"6"},{"1":"G","2":"7"},{"1":"H","2":"8"},{"1":"I","2":"9"},{"1":"J","2":"10"},{"1":"K","2":"11"},{"1":"L","2":"12"},{"1":"M","2":"13"},{"1":"N","2":"14"},{"1":"O","2":"15"},{"1":"P","2":"16"},{"1":"Q","2":"17"},{"1":"R","2":"18"},{"1":"S","2":"19"},{"1":"T","2":"20"},{"1":"U","2":"21"},{"1":"V","2":"22"},{"1":"W","2":"23"},{"1":"X","2":"24"},{"1":"Y","2":"25"},{"1":"Z","2":"26"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>Tibbles can be created directly using the <code>tibble</code> function. Creating tibbles does not convert character vectors into factors, it does not convert columns names, and variables can refer to previous variables.</p>
-<pre class="r"><code>library(tibble)
-
-tibble(
+<pre class="r"><code>tibble(
   Letters = LETTERS, 
   Numbers = 1:26, 
   `:)` = paste0(Letters, Numbers))</code></pre>
-<pre><code>## # A tibble: 26 × 3
-##    Letters Numbers  `:)`
-##      &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;
-## 1        A       1    A1
-## 2        B       2    B2
-## 3        C       3    C3
-## 4        D       4    D4
-## 5        E       5    E5
-## 6        F       6    F6
-## 7        G       7    G7
-## 8        H       8    H8
-## 9        I       9    I9
-## 10       J      10   J10
-## # ... with 16 more rows</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Letters"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Numbers"],"name":[2],"type":["int"],"align":["right"]},{"label":[":)"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"A","2":"1","3":"A1"},{"1":"B","2":"2","3":"B2"},{"1":"C","2":"3","3":"C3"},{"1":"D","2":"4","3":"D4"},{"1":"E","2":"5","3":"E5"},{"1":"F","2":"6","3":"F6"},{"1":"G","2":"7","3":"G7"},{"1":"H","2":"8","3":"H8"},{"1":"I","2":"9","3":"I9"},{"1":"J","2":"10","3":"J10"},{"1":"K","2":"11","3":"K11"},{"1":"L","2":"12","3":"L12"},{"1":"M","2":"13","3":"M13"},{"1":"N","2":"14","3":"N14"},{"1":"O","2":"15","3":"O15"},{"1":"P","2":"16","3":"P16"},{"1":"Q","2":"17","3":"Q17"},{"1":"R","2":"18","3":"R18"},{"1":"S","2":"19","3":"S19"},{"1":"T","2":"20","3":"T20"},{"1":"U","2":"21","3":"U21"},{"1":"V","2":"22","3":"V22"},{"1":"W","2":"23","3":"W23"},{"1":"X","2":"24","3":"X24"},{"1":"Y","2":"25","3":"Y25"},{"1":"Z","2":"26","3":"Z26"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>Tibbles can also be created row-wise using <code>tribble</code> (transposed tibble) so they are more readable. Column names are identified with a “~”.</p>
-<pre class="r"><code>library(tibble)
+<pre class="r"><code>letnum &lt;- tribble(
+  ~Letters, ~Numbers,
+  &quot;A&quot;,      1,
+  &quot;B&quot;,      2,
+  &quot;C&quot;,      3,
+  &quot;D&quot;,      4,
+  &quot;E&quot;,      5)
 
-tribble(
-  ~Letters, ~Numbers,
-  &quot;A&quot;,      1,
-  &quot;B&quot;,      2,
-  &quot;C&quot;,      3,
-  &quot;D&quot;,      4,
-  &quot;E&quot;,      5)</code></pre>
-<pre><code>## # A tibble: 5 × 2
-##   Letters Numbers
-##     &lt;chr&gt;   &lt;dbl&gt;
-## 1       A       1
-## 2       B       2
-## 3       C       3
-## 4       D       4
-## 5       E       5</code></pre>
-<p>The package <code>tibble</code> includes some useful functions, in particular <code>add_row</code> and <code>add_column</code></p>
-<pre class="r"><code>tribble(
-  ~Letters, ~Numbers,
-  &quot;A&quot;,      1,
-  &quot;B&quot;,      2,
-  &quot;C&quot;,      3,
-  &quot;D&quot;,      4,
-  &quot;E&quot;,      5)</code></pre>
-<pre><code>## # A tibble: 5 × 2
-##   Letters Numbers
-##     &lt;chr&gt;   &lt;dbl&gt;
-## 1       A       1
-## 2       B       2
-## 3       C       3
-## 4       D       4
-## 5       E       5</code></pre>
+letnum</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Letters"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Numbers"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"1"},{"1":"B","2":"2"},{"1":"C","2":"3"},{"1":"D","2":"4"},{"1":"E","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The package <code>tibble</code> includes some useful functions, in particular <code>add_row</code> and <code>add_column</code> and <code>has_name</code>:</p>
+<p>Add extra rows to a tibble:</p>
+<pre class="r"><code>add_row(letnum, Letters = &quot;F&quot;, Numbers = 6)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Letters"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Numbers"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"1"},{"1":"B","2":"2"},{"1":"C","2":"3"},{"1":"D","2":"4"},{"1":"E","2":"5"},{"1":"F","2":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Add extra columns to a tibble (<strong>note</strong>: Cannot refer to or replace an existing column, for that use <code>dplyr::mutate</code>):</p>
+<pre class="r"><code>add_column(letnum, Random = runif(n = 5))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Letters"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Numbers"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Random"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"1","3":"0.04370945"},{"1":"B","2":"2","3":"0.31238357"},{"1":"C","2":"3","3":"0.39753919"},{"1":"D","2":"4","3":"0.13692468"},{"1":"E","2":"5","3":"0.85129951"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Check whether a table has a specified column name:</p>
+<pre class="r"><code>has_name(letnum, &quot;Letters&quot;)</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<p>For more information about the other functions in the <code>tibble</code> package see its <a href="https://www.rdocumentation.org/packages/tibble">R Documentation</a>.</p>
 </div>
 <div id="reading-excel-files" class="section level2">
 <h2>Reading Excel Files</h2>
+<p>Excel files can be read into R using the <code>readxl</code> package. By default the function <code>read_excel</code> reads the first sheet in the workbook and returns the contents of the entire sheet:</p>
+<pre class="r"><code>library(readxl)
+
+read_excel(&quot;data/TechnicalProvisions.xlsx&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2017","3":"1046660.2","4":"919830.8"},{"1":"1","2":"2016","3":"953525.5","4":"843865.4"},{"1":"1","2":"2015","3":"1107822.1","4":"767366.4"},{"1":"2","2":"2017","3":"904408.0","4":"790273.2"},{"1":"2","2":"2016","3":"987396.9","4":"617853.3"},{"1":"2","2":"2015","3":"1143862.7","4":"701090.3"},{"1":"3","2":"2017","3":"1033288.2","4":"860298.4"},{"1":"3","2":"2016","3":"989560.2","4":"797455.8"},{"1":"3","2":"2015","3":"1209751.7","4":"755917.1"},{"1":"4","2":"2017","3":"1063499.8","4":"883209.4"},{"1":"4","2":"2016","3":"961298.8","4":"630323.4"},{"1":"4","2":"2015","3":"867491.9","4":"657570.6"},{"1":"5","2":"2017","3":"980981.1","4":"637975.8"},{"1":"5","2":"2016","3":"1114452.3","4":"775538.9"},{"1":"5","2":"2015","3":"1178579.4","4":"924489.6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Alternatively the sheet can be specified by providing its name:</p>
+<pre class="r"><code>read_excel(&quot;data/TechnicalProvisions.xlsx&quot;, sheet = &quot;2016 Submission&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2016","3":"956661.1","4":"752155.0"},{"1":"1","2":"2015","3":"857751.8","4":"544867.1"},{"1":"1","2":"2014","3":"858605.2","4":"550440.7"},{"1":"2","2":"2016","3":"975323.7","4":"601084.7"},{"1":"2","2":"2015","3":"1016798.2","4":"840457.3"},{"1":"2","2":"2014","3":"996594.7","4":"704433.2"},{"1":"3","2":"2016","3":"1104413.6","4":"922129.2"},{"1":"3","2":"2015","3":"1138891.5","4":"738769.7"},{"1":"3","2":"2014","3":"1057739.2","4":"859714.5"},{"1":"4","2":"2016","3":"1092363.5","4":"954205.1"},{"1":"4","2":"2015","3":"865640.8","4":"658171.6"},{"1":"4","2":"2014","3":"935602.0","4":"618775.1"},{"1":"5","2":"2016","3":"1006692.5","4":"852371.8"},{"1":"5","2":"2015","3":"773359.8","4":"569086.7"},{"1":"5","2":"2014","3":"979354.6","4":"688159.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The column types can also be specified, if necessary:</p>
+<pre class="r"><code>read_excel(&quot;data/TechnicalProvisions.xlsx&quot;, col_types = c(&quot;numeric&quot;, &quot;numeric&quot;,&quot;numeric&quot;, &quot;numeric&quot;))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2017","3":"1046660.2","4":"919830.8"},{"1":"1","2":"2016","3":"953525.5","4":"843865.4"},{"1":"1","2":"2015","3":"1107822.1","4":"767366.4"},{"1":"2","2":"2017","3":"904408.0","4":"790273.2"},{"1":"2","2":"2016","3":"987396.9","4":"617853.3"},{"1":"2","2":"2015","3":"1143862.7","4":"701090.3"},{"1":"3","2":"2017","3":"1033288.2","4":"860298.4"},{"1":"3","2":"2016","3":"989560.2","4":"797455.8"},{"1":"3","2":"2015","3":"1209751.7","4":"755917.1"},{"1":"4","2":"2017","3":"1063499.8","4":"883209.4"},{"1":"4","2":"2016","3":"961298.8","4":"630323.4"},{"1":"4","2":"2015","3":"867491.9","4":"657570.6"},{"1":"5","2":"2017","3":"980981.1","4":"637975.8"},{"1":"5","2":"2016","3":"1114452.3","4":"775538.9"},{"1":"5","2":"2015","3":"1178579.4","4":"924489.6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>You can also obtain a list of all the sheets in a workbook with the funtion <code>excel_sheets</code>:</p>
+<pre class="r"><code>excel_sheets(&quot;data/TechnicalProvisions.xlsx&quot;)</code></pre>
+<pre><code>[1] &quot;2017 Submission&quot; &quot;2016 Submission&quot;</code></pre>
+<p>The philosphy behind <code>readxl</code> is to get the data into R and perform any further cleaning and analysis there. The are other packages that give greater control over Excel files. If you wish to read and write to Excel try the package <a href="https://www.rdocumentation.org/packages/openxlsx"><code>openxlsx</code></a>.</p>
 </div>
 <div id="importing-from-sql-server" class="section level2">
 <h2>Importing from SQL Server</h2>
+<p>Importing data from databases</p>
 </div>
 <div id="other-sources" class="section level2">
 <h2>Other Sources</h2>
-<p>RDS</p>
-<p>JSON</p>
-<p>XML</p>
+<div id="rds" class="section level3">
+<h3>RDS</h3>
+<p>RDS stands for R Data Serialization. Any R object can be saved directly to a RDS file so it is fast to read and write. If you wish to cache large tables and will only be reading them into R this is the format to use. The package <code>readr</code> contains functions for reading and writing to the format.</p>
+<pre class="r"><code>library(readr)
+
+read_rds(&quot;data/TechnicalProvisions.rds&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Synd"],"name":[1],"type":["int"],"align":["right"]},{"label":["YoA"],"name":[2],"type":["int"],"align":["right"]},{"label":["GrossPremium"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["NetPremium"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2017","3":"1173258.3","4":"765323.0"},{"1":"1","2":"2016","3":"1082783.6","4":"958354.3"},{"1":"1","2":"2015","3":"968759.5","4":"606159.2"},{"1":"2","2":"2017","3":"867016.0","4":"663203.0"},{"1":"2","2":"2016","3":"816301.7","4":"700624.8"},{"1":"2","2":"2015","3":"1121913.8","4":"787806.4"},{"1":"3","2":"2017","3":"1027294.4","4":"667982.5"},{"1":"3","2":"2016","3":"1055386.8","4":"889051.7"},{"1":"3","2":"2015","3":"1043597.8","4":"839974.4"},{"1":"4","2":"2017","3":"947638.6","4":"609919.5"},{"1":"4","2":"2016","3":"963389.0","4":"805001.3"},{"1":"4","2":"2015","3":"951982.3","4":"626885.5"},{"1":"5","2":"2017","3":"1075900.9","4":"677196.2"},{"1":"5","2":"2016","3":"962469.5","4":"794192.7"},{"1":"5","2":"2015","3":"1075408.0","4":"680442.3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>write_rds(letnum, &quot;data/letnum.rds&quot;)</code></pre>
+</div>
+<div id="json" class="section level3">
+<h3>JSON</h3>
+<p>JSON stands for JavaScript Object Notation. It is a lightweight text-based format commonly used in web interfaces It is human-readable and especially useful for non-tabular data. JSON syntax has four basic rules:</p>
+<ul>
+<li>Data is in name/value pairs</li>
+<li>Data is separated by commas</li>
+<li>Curly braces hold objects</li>
+<li>Square brackets hold arrays</li>
+</ul>
+<p>Some examples of JSON are:</p>
+<pre class="json"><code>{ &quot;name&quot;:&quot;John&quot; }
+
+{ &quot;name&quot;:&quot;John&quot;, &quot;age&quot;:31, &quot;city&quot;:&quot;New York&quot; }
+
+{ &quot;employees&quot;: [
+  { &quot;firstName&quot;: &quot;John&quot;, &quot;lastName&quot;: &quot;Doe&quot; },
+  { &quot;firstName&quot;: &quot;Anna&quot;, &quot;lastName&quot;: &quot;Smith&quot; },
+  { &quot;firstName&quot;: &quot;Peter&quot;, &quot;lastName&quot;: &quot;Jones&quot; }
+] }</code></pre>
+<p>To read JSON files we use the <code>jsonlite</code> package, which returns the data in the form of a list.</p>
+<pre class="r"><code>library(jsonlite)
+
+# TODO: Replace with a Lloyd&#39;s oriented example
+read_json(&quot;data/employees.json&quot;)</code></pre>
+<pre><code>$employees
+$employees[[1]]
+$employees[[1]]$firstName
+[1] &quot;John&quot;
+
+$employees[[1]]$lastName
+[1] &quot;Doe&quot;
+
+
+$employees[[2]]
+$employees[[2]]$firstName
+[1] &quot;Anna&quot;
+
+$employees[[2]]$lastName
+[1] &quot;Smith&quot;
+
+
+$employees[[3]]
+$employees[[3]]$firstName
+[1] &quot;Peter&quot;
+
+$employees[[3]]$lastName
+[1] &quot;Jones&quot;</code></pre>
+</div>
+<div id="xml" class="section level3">
+<h3>XML</h3>
+<p>XML stands for eXensible Markup Language. It is also a text-based format for storing non-tabular data, which is more verbose than JSON. It is a very popular way to store data for applications. HTML, used for encoding web pages is a special form of XML.</p>
+<pre class="xml"><code>&lt;name&gt;John&lt;/name&gt;
+
+&lt;name&gt;John&lt;/name&gt; &lt;age&gt;31&lt;/age&gt; &lt;city&gt;New York&lt;/city&gt;
+
+&lt;employees&gt;
+  &lt;employee&gt;
+    &lt;firstName&gt;John&lt;/firstName&gt; &lt;lastName&gt;Doe&lt;/lastName&gt;
+  &lt;/employee&gt;
+  &lt;employee&gt;
+    &lt;firstName&gt;Anna&lt;/firstName&gt; &lt;lastName&gt;Smith&lt;/lastName&gt;
+  &lt;/employee&gt;
+  &lt;employee&gt;
+    &lt;firstName&gt;Peter&lt;/firstName&gt; &lt;lastName&gt;Jones&lt;/lastName&gt;
+  &lt;/employee&gt;
+&lt;/employees&gt;</code></pre>
+<p>To read XML files we use the <code>xml2</code> package, which returns an XML document. To use the data in R the simplest method is to convert it to a list using <code>as_list</code>.</p>
+<pre class="r"><code>library(xml2)
+
+xml_doc &lt;- read_xml(&quot;data/employees.xml&quot;)
+xml_doc</code></pre>
+<pre><code>{xml_document}
+&lt;employees&gt;
+[1] &lt;employee&gt;\n  &lt;firstName&gt;John&lt;/firstName&gt;\n  &lt;lastName&gt;Doe&lt;/lastName ...
+[2] &lt;employee&gt;\n  &lt;firstName&gt;Anna&lt;/firstName&gt;\n  &lt;lastName&gt;Smith&lt;/lastNa ...
+[3] &lt;employee&gt;\n  &lt;firstName&gt;Peter&lt;/firstName&gt;\n  &lt;lastName&gt;Jones&lt;/lastN ...</code></pre>
+<pre class="r"><code>as_list(xml_doc)</code></pre>
+<pre><code>$employee
+$employee$firstName
+$employee$firstName[[1]]
+[1] &quot;John&quot;
+
+
+$employee$lastName
+$employee$lastName[[1]]
+[1] &quot;Doe&quot;
+
+
+
+$employee
+$employee$firstName
+$employee$firstName[[1]]
+[1] &quot;Anna&quot;
+
+
+$employee$lastName
+$employee$lastName[[1]]
+[1] &quot;Smith&quot;
+
+
+
+$employee
+$employee$firstName
+$employee$firstName[[1]]
+[1] &quot;Peter&quot;
+
+
+$employee$lastName
+$employee$lastName[[1]]
+[1] &quot;Jones&quot;</code></pre>
+</div>
+<div id="yaml" class="section level3">
+<h3>YAML</h3>
+<p>YAML stands for YAML Ain’t Markup Language. Another popular file format, particularly for configuration files. It is very similar to JSON but it is even more lightweight. It uses new lines to separate data; indentation to show heirarchy and “-” to indicate array elements. For example:</p>
+<pre class="yaml"><code>name : John
+age  : 31
+city : New York
+
+employees :
+  - firstName : John
+    lastName  : Doe
+  - firstName : Anna
+    lastName  : Smith
+  - firstName : Peter
+    lastName  : Jones</code></pre>
+<p>There is currently a “tidyverse” version of an R package but the package <code>yaml</code> does the job with its function <code>yaml.load_file</code></p>
+<pre class="r"><code>library(yaml)
+
+yaml.load_file(&quot;data/employees.yaml&quot;)</code></pre>
+<pre><code>$employees
+$employees[[1]]
+$employees[[1]]$firstName
+[1] &quot;John&quot;
+
+$employees[[1]]$lastName
+[1] &quot;Doe&quot;
+
+
+$employees[[2]]
+$employees[[2]]$firstName
+[1] &quot;Anna&quot;
+
+$employees[[2]]$lastName
+[1] &quot;Smith&quot;
+
+
+$employees[[3]]
+$employees[[3]]$firstName
+[1] &quot;Peter&quot;
+
+$employees[[3]]$lastName
+[1] &quot;Jones&quot;</code></pre>
+</div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 

@@ -1,16 +1,33 @@
 ---
 title: "Importing Data"
-author: "Chad Goymer"
-output: html_document
+output: 
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
 ---
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+opts_chunk$set(comment = NA)
+```
 
 Reading CSVs
 ------------
 
+To read CSVs, as well as any other plain text tabular file formats, we use the package `readr`. The 
+function `read_csv` replaces the function `read.csv` from base R and improves upon it in a number 
+of ways:
+
+ 1. it is much faster
+ 2. it does not transform headers
+ 3. it does not convert character columns into factors
+
+Otherwise, it is used in the same way as `read.csv`
+
 ```{r}
 library(readr)
-
-# read_csv("D:/Temp/NetPremiums_31225.csv")
+read_csv("data/TechnicalProvisions.csv")
 ```
 
 The function guesses the data type of each column by reading the first 1000 rows. If later values 
@@ -18,25 +35,22 @@ do not conform to the guess the problems are reported. The types can be specifie
 the `col_types` argument.
 
 ```{r}
-library(readr)
-
-# read_csv(
-#   "D:/Temp/NetPremiums_31225.csv", 
-#   col_types = cols(
-#     Synd = col_integer(),
-#     YoA = col_integer(),
-#     RG = col_character(),
-#     Ccy = col_character(),
-#     Value = col_double()))
-
+read_csv(
+  "data/TechnicalProvisions.csv",
+  col_types = cols(
+    Synd         = col_integer(),
+    YoA          = col_integer(),
+    GrossPremium = col_double(),
+    NetPremium   = col_double()))
 ```
 
-By default the function will set any missing values `""` or `"NA"` to `NA`, which is R's way of 
-recording missing values. __Note:__ Lloyd's has a "NA" risk code so in that case you will need 
-to set `na = ""` in the function call.
+By default the function will set any `""` or `"NA"` to `NA`, which is R's way of recording missing 
+values. __Note:__ Lloyd's has a "NA" risk code so in that case you will need to set `na = ""` in 
+the function call.
 
 `read_csv` has a number of other arguments which may be useful, see `help(read_csv)` for more 
-details.
+details. For more information about the other functions in the `readr` package see its 
+[R Documentation](https://www.rdocumentation.org/packages/readr).
 
 Tibbles
 -------
@@ -60,8 +74,6 @@ character vectors into factors, it does not convert columns names, and variables
 previous variables.
 
 ```{r}
-library(tibble)
-
 tibble(
   Letters = LETTERS, 
   Numbers = 1:26, 
@@ -72,40 +84,195 @@ Tibbles can also be created row-wise using `tribble` (transposed tibble) so they
 Column names are identified with a "~".
 
 ```{r}
-library(tibble)
-
-tribble(
+letnum <- tribble(
   ~Letters, ~Numbers,
   "A",      1,
   "B",      2,
   "C",      3,
   "D",      4,
   "E",      5)
+
+letnum
 ```
 
-The package `tibble` includes some useful functions, in particular `add_row` and `add_column`
+The package `tibble` includes some useful functions, in particular `add_row` and `add_column` and 
+`has_name`:
+
+Add extra rows to a tibble:
 
 ```{r}
-tribble(
-  ~Letters, ~Numbers,
-  "A",      1,
-  "B",      2,
-  "C",      3,
-  "D",      4,
-  "E",      5)
+add_row(letnum, Letters = "F", Numbers = 6)
 ```
+
+Add extra columns to a tibble (__note__: Cannot refer to or replace an existing column, for that 
+use `dplyr::mutate`):
+
+```{r}
+add_column(letnum, Random = runif(n = 5))
+```
+
+Check whether a table has a specified column name:
+
+```{r}
+has_name(letnum, "Letters")
+```
+
+For more information about the other functions in the `tibble` package see its 
+[R Documentation](https://www.rdocumentation.org/packages/tibble).
 
 Reading Excel Files
 -------------------
 
+Excel files can be read into R using the `readxl` package. By default the function `read_excel` 
+reads the first sheet in the workbook and returns the contents of the entire sheet:
+
+```{r}
+library(readxl)
+
+read_excel("data/TechnicalProvisions.xlsx")
+```
+
+Alternatively the sheet can be specified by providing its name:
+
+```{r}
+read_excel("data/TechnicalProvisions.xlsx", sheet = "2016 Submission")
+```
+
+The column types can also be specified, if necessary:
+
+```{r}
+read_excel("data/TechnicalProvisions.xlsx", col_types = c("numeric", "numeric","numeric", "numeric"))
+```
+
+You can also obtain a list of all the sheets in a workbook with the funtion `excel_sheets`:
+
+```{r}
+excel_sheets("data/TechnicalProvisions.xlsx")
+```
+
+The philosphy behind `readxl` is to get the data into R and perform any further cleaning and 
+analysis there. The are other packages that give greater control over Excel files. If you wish to 
+read and write to Excel try the package [`openxlsx`](https://www.rdocumentation.org/packages/openxlsx).
+
 Importing from SQL Server
 -------------------------
+
+Importing data from databases
 
 Other Sources
 -------------
 
-RDS
+### RDS
 
-JSON
+RDS stands for R Data Serialization. Any R object can be saved directly to a RDS file so it is fast 
+to read and write. If you wish to cache large tables and will only be reading them into R this is 
+the format to use. The package `readr` contains functions for reading and writing to the format.
 
-XML
+```{r}
+library(readr)
+
+read_rds("data/TechnicalProvisions.rds")
+write_rds(letnum, "data/letnum.rds")
+```
+
+### JSON
+
+JSON stands for JavaScript Object Notation. It is a lightweight text-based format commonly used 
+in web interfaces It is human-readable and especially useful for non-tabular data. JSON syntax 
+has four basic rules:
+
+ - Data is in name/value pairs
+ - Data is separated by commas
+ - Curly braces hold objects
+ - Square brackets hold arrays
+
+Some examples of JSON are:
+
+```{json}
+{ "name":"John" }
+
+{ "name":"John", "age":31, "city":"New York" }
+
+{ "employees": [
+  { "firstName": "John", "lastName": "Doe" },
+  { "firstName": "Anna", "lastName": "Smith" },
+  { "firstName": "Peter", "lastName": "Jones" }
+] }
+```
+
+To read JSON files we use the `jsonlite` package, which returns the data in the form of a list.
+
+```{r}
+library(jsonlite)
+
+# TODO: Replace with a Lloyd's oriented example
+read_json("data/employees.json")
+
+```
+
+### XML
+
+XML stands for eXensible Markup Language. It is also a text-based format for storing non-tabular 
+data, which is more verbose than JSON. It is a very popular way to store data for applications.
+HTML, used for encoding web pages is a special form of XML.
+
+```{xml}
+<name>John</name>
+
+<name>John</name> <age>31</age> <city>New York</city>
+
+<employees>
+  <employee>
+    <firstName>John</firstName> <lastName>Doe</lastName>
+  </employee>
+  <employee>
+    <firstName>Anna</firstName> <lastName>Smith</lastName>
+  </employee>
+  <employee>
+    <firstName>Peter</firstName> <lastName>Jones</lastName>
+  </employee>
+</employees>
+```
+
+To read XML files we use the `xml2` package, which returns an XML document. To use the data in R 
+the simplest method is to convert it to a list using `as_list`.
+
+```{r}
+library(xml2)
+
+xml_doc <- read_xml("data/employees.xml")
+xml_doc
+```
+
+```{r}
+as_list(xml_doc)
+```
+
+### YAML
+
+YAML stands for YAML Ain't Markup Language. Another popular file format, particularly for 
+configuration files. It is very similar to JSON but it is even more lightweight. It uses new lines 
+to separate data; indentation to show heirarchy and "-" to indicate array elements. For example:
+
+```{yaml}
+name : John
+age  : 31
+city : New York
+
+employees :
+  - firstName : John
+    lastName  : Doe
+  - firstName : Anna
+    lastName  : Smith
+  - firstName : Peter
+    lastName  : Jones
+```
+
+There is currently a "tidyverse" version of an R package but the package `yaml` does the job with 
+its function `yaml.load_file`
+
+```{r}
+library(yaml)
+
+yaml.load_file("data/employees.yaml")
+```
