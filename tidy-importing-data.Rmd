@@ -12,6 +12,15 @@ library(knitr)
 opts_chunk$set(comment = NA)
 ```
 
+#### Packages Introduced
+
+[`readr`](https://www.rdocumentation.org/packages/readr)
+[`tibble`](https://www.rdocumentation.org/packages/tibble)
+[`readxl`](https://www.rdocumentation.org/packages/readxl)
+[`jsonlite`](https://www.rdocumentation.org/packages/jsonlite)
+[`xml2`](https://www.rdocumentation.org/packages/xml2)
+[`yaml`](https://www.rdocumentation.org/packages/yaml)
+
 Reading CSVs
 ------------
 

@@ -1,0 +1,26 @@
+---
+title: "Tidying Data"
+output: 
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+---
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+opts_chunk$set(comment = NA)
+```
+
+#### Packages Introduced
+
+[`tidyr`](https://www.rdocumentation.org/packages/tidyr)
+[`stringr`](https://www.rdocumentation.org/packages/stringr)
+[`lubridate`](https://www.rdocumentation.org/packages/lubridate)
+[`hms`](https://www.rdocumentation.org/packages/hms)
+[`forcats`](https://www.rdocumentation.org/packages/forcats)
+[`magrittr`](https://www.rdocumentation.org/packages/magrittr)
+
+Tidy Data
+---------
+
